@@ -27,7 +27,8 @@ eval "export HOME${model:?'model undefined'}=$modelhome"
 eval "versionfile=\$HOME${model}/versions/run.ver"
 if [ -f "$versionfile" ]; then . $versionfile ; fi
 modelver=$(echo ${modelhome} | perl -pe "s:.*?/${model}\.(v[\d\.a-z]+).*:\1:")
-eval "export ${model}_ver=$modelver"
+#eval "export ${model}_ver=$modelver"
+export gcafs_ver=v1.0
 
 export envir=%ENVIR%
 export MACHINE_SITE=%MACHINE_SITE%
@@ -38,7 +39,8 @@ if [ -n "%PDY:%" ]; then export PDY=${PDY:-%PDY:%}; fi
 if [ -n "%PARATEST:%" ]; then export PARATEST=${PARATEST:-%PARATEST:%}; fi
 if [ -n "%COMPATH:%" ]; then export COMPATH=${COMPATH:-%COMPATH:%}; fi
 if [ -n "%MAILTO:%" ]; then export MAILTO=${MAILTO:-%MAILTO:%}; fi
-if [ -n "%DBNLOG:%" ]; then export DBNLOG=${DBNLOG:-%DBNLOG:%}; fi
+#if [ -n "%DBNLOG:%" ]; then export DBNLOG=${DBNLOG:-%DBNLOG:%}; fi
+if [ -n "%DBNLOG:%" ]; then export DBNLOG=YES; fi
 export KEEPDATA=${KEEPDATA:-%KEEPDATA:NO%}
 export SENDDBN=${SENDDBN:-%SENDDBN:YES%}
 export SENDDBN_NTC=${SENDDBN_NTC:-%SENDDBN_NTC:YES%}
@@ -59,12 +61,6 @@ if [ -d /apps/ops/prod ]; then # On WCOSS2
   echo "Listing modules from head.h:"
   module list
   set -x
-  if [[ ! " ops.prod ops.para " =~ " $(whoami) " ]]; then
-    echo "Allow over-riding defaults for developers"
-    if [ -n "%COMROOT:%" ]; then export COMROOT="%COMROOT:%"; fi
-    if [ -n "%DATAROOT:%" ]; then export DATAROOT="%DATAROOT:%"; fi
-    if [ -n "%DCOMROOT:%" ]; then export DCOMROOT="%DCOMROOT:%"; fi
-  fi
 fi
 
 timeout 300 ecflow_client --init=${ECF_RID}
